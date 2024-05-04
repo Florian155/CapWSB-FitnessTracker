@@ -1,6 +1,7 @@
 package com.capgemini.wsb.fitnesstracker.user.internal;
 
 import com.capgemini.wsb.fitnesstracker.user.api.User;
+import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
 import com.capgemini.wsb.fitnesstracker.user.api.UserProvider;
 import com.capgemini.wsb.fitnesstracker.user.api.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,4 +42,20 @@ class UserServiceImpl implements UserService, UserProvider {
         return userRepository.findAll();
     }
 
+
+    @Override
+    public void deleteUser(Long userId) throws UserNotFoundException {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new UserNotFoundException();
+        }
+
+
+    }
+    @Override
+    public List<User> searchUsersByEmail(String emailFragment) {
+        return userRepository.findByEmailContainingIgnoreCase(emailFragment);
+    }
 }

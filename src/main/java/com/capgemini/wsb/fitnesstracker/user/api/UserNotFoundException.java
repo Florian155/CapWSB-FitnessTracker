@@ -2,6 +2,8 @@ package com.capgemini.wsb.fitnesstracker.user.api;
 
 import com.capgemini.wsb.fitnesstracker.exception.api.NotFoundException;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 /**
  * Exception indicating that the {@link User} was not found.
  */
@@ -12,7 +14,7 @@ public class UserNotFoundException extends NotFoundException {
         super(message);
     }
 
-    public UserNotFoundException(Long id) {
+    public UserNotFoundException() {
         this("User with ID=%s was not found".formatted(id));
     }
 
