@@ -21,13 +21,14 @@ public interface UserProvider {
      * @param email The email of the user to be searched
      * @return An {@link Optional} containing the located user, or {@link Optional#empty()} if not found
      */
-    List<User> getUserByEmail(String email);
 
     /**
      * Retrieves all users.
      *
      * @return An {@link Optional} containing the all users,
      */
-    List<User> findAllUsers();
+     List<User> findAllUsers();
+
+
 
 }
