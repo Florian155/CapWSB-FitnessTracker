@@ -22,6 +22,17 @@ public class TrainingMapper {
         trainingDto.setEndTime(training.getEndTime());
         return trainingDto;
     }
+    Training toEntity(TrainingDto trainingDto) {
+        Training training = new Training();
+        training.setId(trainingDto.getId());
+        training.setUser(userMapper.toEntity(trainingDto.getUser()));
+        training.setAverageSpeed(trainingDto.getAverageSpeed());
+        training.setDistance(trainingDto.getDistance());
+        training.setStartTime(trainingDto.getStartTime());
+        training.setEndTime(trainingDto.getEndTime());
+        return training;
+    }
+
 
 
 }

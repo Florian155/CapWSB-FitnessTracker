@@ -4,17 +4,19 @@ import com.capgemini.wsb.fitnesstracker.training.api.Training;
 import com.capgemini.wsb.fitnesstracker.training.api.TrainingProvider;
 import com.capgemini.wsb.fitnesstracker.training.api.TrainingService;
 import com.capgemini.wsb.fitnesstracker.user.api.User;
-import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
 import com.capgemini.wsb.fitnesstracker.user.api.UserService;
-import com.capgemini.wsb.fitnesstracker.user.internal.UserRepository;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+
 
 // TODO: Provide Impl
 @Service
@@ -38,22 +40,30 @@ public class TrainingServiceImpl implements TrainingProvider, TrainingService{
     public List<Training> getAllTrainingsForDedicatedUser(Long userId) {
         return trainingRepository.findAll().stream().filter(training -> training.getUser().getId().equals(userId)).collect(Collectors.toList());
     }
-    @Override
+
+
     public List<Training> getAllTrainingsForDedicatedEndTime(Date endTime) {
-        return trainingRepository.findAll().stream().filter(training -> training.getEndTime().equals(endTime)).collect(Collectors.toList());
-    }}
-//    @Override
-//    public Training createTraining(User user, Date startTime, Date endTime, ActivityType activityType, double distance, double averageSpeed) {
-//        User user = userService.
-//
-//        // Create a new Training object
-//        Training training = new Training(user, endTime, activityType, distance, averageSpeed);
-//
-//
-//        // Save the Training object
-//        return trainingRepository.save(training);
-//    }
-//}
+        return trainingRepository.findAll().stream()
+                .filter(training -> {
+                    // Porównanie dat bez uwzględniania czasu
+                    return training.getEndTime().getYear() == endTime.getYear() &&
+                            training.getEndTime().getMonth() == endTime.getMonth() &&
+                            training.getEndTime().getDate() == endTime.getDate();
+                })
+                .collect(Collectors.toList());
+    }
+    public List<Training> getAllTrainingsForActivity(ActivityType activityType) {
+        return trainingRepository.findAll().stream()
+                .filter(training -> training.getActivityType().equals(activityType))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Training createTraining(Training training) {
+        // Tutaj możesz dodać logikę walidacji lub innych operacji przed zapisaniem treningu
+        return trainingRepository.save(training);
+    }
+}
 
 
 

@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.util.Date;
 @Data
+@NoArgsConstructor
 public class TrainingDto{
 
     private Long id;
