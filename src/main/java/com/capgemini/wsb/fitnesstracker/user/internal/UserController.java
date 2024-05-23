@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -44,10 +44,19 @@ class UserController {
     }
 
     @GetMapping("/{userId}")
-    public Optional<User> getUserDetails(@PathVariable Long userId) {
-        return userService.getUserDetails(userId);
+    public ResponseEntity<UserDto> getUserDetails(@PathVariable Long userId) {
+        Optional<User> optionalUser = userService.getUser(userId);
 
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            UserDto userDto = userMapper.toDto(user);
+            return ResponseEntity.ok(userDto);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + userId);
+        }
     }
+
+
 
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
@@ -62,10 +71,11 @@ class UserController {
                     .body("Failed to delete user with ID: " + userId);
         }
     }
+    @GetMapping("/email/{email}")
+    public ResponseEntity<List<MailUserDto>> getUserByMail(@PathVariable String email){
+        List<MailUserDto> mailUserDto = userService.findUserByMail(email);
+    return ResponseEntity.ok().body(mailUserDto);
+    }
+}
 
 
-    @GetMapping("/{email}")
-    public   List<MailUserDto> getUserByEmail(@PathVariable String email){
-        return userService.getUserByEmail(email).stream().map(UserMapper::toMailUserDto).collect(Collectors.toList());
-    }
-    }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ import java.util.Optional;
 class UserServiceImpl implements UserService, UserProvider {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public User createUser(final User user) {
@@ -27,15 +29,11 @@ class UserServiceImpl implements UserService, UserProvider {
         return userRepository.save(user);
     }
 
+
+
     @Override
-    public Optional<User> getUserDetails(Long userId) {
+    public Optional<User> getUser(final Long userId) {
         return userRepository.findById(userId);
-
-    }
-
-    @Override
-    public Optional<User> getUser(Long userId) {
-        throw new UnsupportedOperationException("Not exist");
     }
 
     @Override
@@ -60,8 +58,14 @@ class UserServiceImpl implements UserService, UserProvider {
 
 
     }
-//    @Override
-//    public List<User> searchUsersByEmail(String emailFragment) {
-//        return userRepository.findByEmailContainingIgnoreCase(emailFragment);
-//    }
-}
+
+    public List<MailUserDto> findUserByMail(String email) {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getEmail().toLowerCase().contains(email.toLowerCase()))
+                .map(UserMapper::toMailUserDto)
+                .collect(Collectors.toList());
+    }}
+
+
+
+

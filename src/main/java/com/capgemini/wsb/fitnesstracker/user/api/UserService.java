@@ -1,5 +1,7 @@
 package com.capgemini.wsb.fitnesstracker.user.api;
 
+import com.capgemini.wsb.fitnesstracker.user.internal.UserDto;
+
 import java.util.Optional;
 
 /**
@@ -10,11 +12,9 @@ public interface UserService {
 
     User createUser(User user);
 
-    Optional<User> getUserDetails(Long userId);
+    void deleteUser(Long userId) ;
 
-    void deleteUser(Long userId) throws UserNotFoundException;
 
-//    List<User> searchUsersByEmail(String emailFragment);
 
 
 }
