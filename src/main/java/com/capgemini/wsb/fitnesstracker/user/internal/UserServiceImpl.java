@@ -28,12 +28,18 @@ class UserServiceImpl implements UserService, UserProvider {
     }
 
     @Override
-    public Optional<User> getUser(final Long userId) {
+    public Optional<User> getUserDetails(Long userId) {
         return userRepository.findById(userId);
+
     }
 
     @Override
-    public Optional<User> getUserByEmail(final String email) {
+    public Optional<User> getUser(Long userId) {
+        throw new UnsupportedOperationException("Not exist");
+    }
+
+    @Override
+    public List<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -54,8 +60,8 @@ class UserServiceImpl implements UserService, UserProvider {
 
 
     }
-    @Override
-    public List<User> searchUsersByEmail(String emailFragment) {
-        return userRepository.findByEmailContainingIgnoreCase(emailFragment);
-    }
+//    @Override
+//    public List<User> searchUsersByEmail(String emailFragment) {
+//        return userRepository.findByEmailContainingIgnoreCase(emailFragment);
+//    }
 }

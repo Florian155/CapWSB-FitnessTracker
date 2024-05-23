@@ -95,7 +95,7 @@ class InitialDataLoader {
                                               ActivityType.CYCLING,
                                               25.0,
                                               18.5);
-            Training training3 = new Training(users.get(2),
+            Training training3 = new Training(users.get(1),
                                               sdf.parse("2024-01-17 07:45:00"),
                                               sdf.parse("2024-01-17 09:00:00"),
                                               ActivityType.WALKING,
@@ -137,7 +137,7 @@ class InitialDataLoader {
                                               ActivityType.WALKING,
                                               4.2,
                                               4.5);
-            Training training10 = new Training(users.get(9),
+            Training training10 = new Training(users.get(1),
                                                sdf.parse("2024-01-10 14:00:00"),
                                                sdf.parse("2024-01-10 15:15:00"),
                                                ActivityType.RUNNING,

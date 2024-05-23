@@ -7,9 +7,9 @@ import java.util.Optional;
 
 
 @Component
-class UserMapper {
+public class UserMapper {
 
-    UserDto toDto(User user) {
+    public UserDto toDto(User user) {
         return new UserDto(user.getId(),
                            user.getFirstName(),
                            user.getLastName(),
@@ -30,6 +30,12 @@ class UserMapper {
                 user.getFirstName(),
                 user.getLastName()
                 );
+    }
+    static MailUserDto toMailUserDto(User user) {
+        return new MailUserDto(
+                user.getId(),
+                user.getEmail()
+        );
     }
 
 

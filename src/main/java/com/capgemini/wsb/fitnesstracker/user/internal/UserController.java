@@ -3,14 +3,13 @@ package com.capgemini.wsb.fitnesstracker.user.internal;
 import com.capgemini.wsb.fitnesstracker.user.api.User;
 import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.buf.UEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -45,19 +44,12 @@ class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUserDetails(@PathVariable Long userId) {
-        Optional<User> optionalUser = userService.getUser(userId);
+    public Optional<User> getUserDetails(@PathVariable Long userId) {
+        return userService.getUserDetails(userId);
 
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            UserDto userDto = userMapper.toDto(user);
-            return ResponseEntity.ok(userDto);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + userId);
-        }
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/delete/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
             userService.deleteUser(userId);
@@ -72,12 +64,8 @@ class UserController {
     }
 
 
-    @GetMapping("/search")
-    public ResponseEntity<List<UserIdMail>> searchUsersByEmail(@RequestParam String emailFragment) {
-        List<User> users = userService.searchUsersByEmail(emailFragment);
-        List<UserIdMail> userIdMails = users.stream()
-                .map(userMapper::toUserIdMail)
-                .toList();
-        return ResponseEntity.ok(userIdMails);
+    @GetMapping("/{email}")
+    public   List<MailUserDto> getUserByEmail(@PathVariable String email){
+        return userService.getUserByEmail(email).stream().map(UserMapper::toMailUserDto).collect(Collectors.toList());
     }
     }

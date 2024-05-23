@@ -10,7 +10,7 @@ import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 @SuppressWarnings("squid:S110")
 public class UserNotFoundException extends NotFoundException {
 
-    private UserNotFoundException(String message) {
+    public UserNotFoundException(String message) {
         super(message);
     }
 

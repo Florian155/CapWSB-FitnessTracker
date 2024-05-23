@@ -7,9 +7,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    List<UserIdMail> findByEmailContainingIgnoreCase(String emailFragment);
+    List<User> findByEmail(String email);
+
 
     /**
      * Query searching users by email address. It matches by exact match.
@@ -17,11 +18,8 @@ interface UserRepository extends JpaRepository<User, Long> {
      * @param email email of the user to search
      * @return {@link Optional} containing found user or {@link Optional#empty()} if none matched
      */
-    default Optional<User> findByEmail(String email) {
-        return findAll().stream()
-                        .filter(user -> Objects.equals(user.getEmail(), email))
-                        .findFirst();
+
     }
 
 
-}
+
