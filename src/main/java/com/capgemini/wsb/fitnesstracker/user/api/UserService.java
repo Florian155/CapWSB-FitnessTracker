@@ -1,7 +1,5 @@
 package com.capgemini.wsb.fitnesstracker.user.api;
 
-import com.capgemini.wsb.fitnesstracker.user.internal.UserDto;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +46,7 @@ public interface UserService {
      *         lub pusty, jeśli użytkownik nie został znaleziony.
      */
     Optional<User> getUserByParam(String param);
+    Optional<User> getUser(Long userId);
 
 
 }

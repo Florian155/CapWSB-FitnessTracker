@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserProvider {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+
 
     @Override
     public User createUser(final User user) {
@@ -36,9 +36,6 @@ public class UserServiceImpl implements UserService, UserProvider {
         return Period.between(birthDate, currentDate).getYears();
     }
     public List<User> getUsersOlderThanAge(int age) {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate birthDateThreshold = currentDate.minusYears(age);
-
         List<User> allUsers = userRepository.findAll();
         return allUsers.stream()
                 .filter(user -> calculateAge(user.getBirthdate()) > age)
@@ -61,7 +58,7 @@ public class UserServiceImpl implements UserService, UserProvider {
             existingUser.setBirthdate(user.getBirthdate());
         }
 
-        // Zapisujemy tylko, jeśli dokonano zmian w istniejącym użytkowniku
+
         if (!existingUser.equals(user)) {
             existingUser = userRepository.save(existingUser);
         }
@@ -96,7 +93,7 @@ public class UserServiceImpl implements UserService, UserProvider {
 
     }
 
-    public List<MailUserDto> findUserByMail(String email) {
+    List<MailUserDto> findUserByMail(String email) {
         return userRepository.findAll().stream()
                 .filter(user -> user.getEmail().toLowerCase().contains(email.toLowerCase()))
                 .map(UserMapper::toMailUserDto)

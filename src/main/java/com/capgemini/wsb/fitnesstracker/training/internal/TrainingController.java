@@ -1,30 +1,21 @@
 package com.capgemini.wsb.fitnesstracker.training.internal;
 
 import com.capgemini.wsb.fitnesstracker.training.api.Training;
-import com.capgemini.wsb.fitnesstracker.user.api.User;
-import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
-import com.capgemini.wsb.fitnesstracker.user.api.UserService;
-import com.capgemini.wsb.fitnesstracker.user.internal.UserDto;
 import com.capgemini.wsb.fitnesstracker.user.internal.UserServiceImpl;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/trainings")
 @RequiredArgsConstructor
 
-public class TrainingController {
+ class TrainingController {
     private final UserServiceImpl userService;
     private final TrainingServiceImpl trainingService;
     private final TrainingMapper trainingMapper;
@@ -51,25 +42,23 @@ public class TrainingController {
                 .map(trainingMapper::toDto)
                 .collect(Collectors.toList());
     }
-    @PostMapping("/addTraining")
-    public ResponseEntity<?> addTraining(@RequestBody TrainingDto trainingDto, @RequestParam(value = "userId", required = false) Long userId) {
-        if (userId == null) {
-            return ResponseEntity.badRequest().body("User ID is required");
-        } else {
-            Optional<User> optionalUser = userService.getUser(userId);
-            if (optionalUser.isPresent()) {
-                User existingUser = optionalUser.get();
-                Training newTraining = new Training();
-                newTraining.setUser(existingUser);
+        @PostMapping("/addTraining")
+        public ResponseEntity<TrainingDto> addTraining(@RequestBody Training training, @RequestParam(value = "userId", required = false) Long userId) {
+                Training newTraining = trainingService.createTraining(training, userId);
+                TrainingDto trainingDto = trainingMapper.toDto(newTraining);
+                return ResponseEntity.ok(trainingDto);
 
-                Training createdTraining = trainingService.createTraining(newTraining);
-                return ResponseEntity.ok(createdTraining);
-            } else {
-                return ResponseEntity.badRequest().body("User with ID " + userId + " not found");
-            }
+
         }
+    @PutMapping("/update/{trainingId}")
+    public ResponseEntity<TrainingDto> updateTraining(@PathVariable Long trainingId, @RequestBody TrainingDto trainingDto) {
+        Training training = trainingMapper.toEntity(trainingDto);
+        Training updatedTraining = trainingService.update(trainingId, training);
+        return ResponseEntity.ok(trainingMapper.toDto(updatedTraining));
     }
-    }
+}
+
+
 
 
 
