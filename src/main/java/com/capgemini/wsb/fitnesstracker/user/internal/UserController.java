@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,9 +21,19 @@ class UserController {
     private final UserServiceImpl userService;
 
     private final UserMapper userMapper;
+    @GetMapping()
+    public List<UserDto> getAllUsers() {
+        List<User> userList = userService.findAllUsers();
+        return userService.findAllUsers()
+                .stream()
+                .map(userMapper::toDto)
+                .toList();
+    }
 
-    @GetMapping
-    public List<SimpleUserDto> getAllUsers() {
+
+
+    @GetMapping("/simple")
+    public List<SimpleUserDto> getAllSimpleUsers() {
         List<User> userList = userService.findAllUsers();
         return userService.findAllUsers()
                 .stream()
@@ -31,15 +42,16 @@ class UserController {
     }
 
 
-    @PostMapping("/addUser")
-    public User addUser(@RequestBody UserDto userDto) {
+    @PostMapping
+    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
 
-        System.out.println("User with e-mail: " + userDto.email() + "passed to the request");
+        System.out.println("User with e-mail: " + userDto.email() + " passed to the request");
+
 
         User newUser = userService.createUser(userMapper.toEntity(userDto));
 
         UserDto newUserDto = userMapper.toDto(newUser);
-        return newUser;
+        return ResponseEntity.status(HttpStatus.CREATED).body(newUserDto);
     }
 
     @GetMapping("/{param}")
@@ -56,11 +68,11 @@ class UserController {
     }
 
 
-    @DeleteMapping("/delete/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
             userService.deleteUser(userId);
-            return ResponseEntity.ok("User with ID: " + userId + " has been successfully deleted.");
+            return ResponseEntity.noContent().build();
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("User not found with ID: " + userId);
@@ -70,22 +82,23 @@ class UserController {
         }
     }
 
-    @GetMapping("/email/{email}")
-    public ResponseEntity<List<MailUserDto>> getUserByMail(@PathVariable String email) {
-        List<MailUserDto> mailUserDto = userService.findUserByMail(email);
-        return ResponseEntity.ok().body(mailUserDto);
-    }
+    @GetMapping("/email")
+    public ResponseEntity<List<MailUserDto>> getUserByMail(@RequestParam String email){
+            List<MailUserDto> mailUserDto = userService.findUsersByMail(email);
+            return ResponseEntity.ok().body(mailUserDto);
+        }
 
-    @GetMapping("/details")
-    public ResponseEntity<List<UserDto>> getUsersOlderThanAge(@RequestParam int age) {
-        List<User> users = userService.getUsersOlderThanAge(age);
+    @GetMapping("/older/{time}")
+    public ResponseEntity<List<UserDto>> getUsersOlderThanDate(@PathVariable LocalDate time) {
+        List<User> users = userService.getUsersOlderThanDate(time);
         List<UserDto> userDtos = users.stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(userDtos);
     }
 
-    @PutMapping("/update/{userId}")
+
+    @PutMapping("/{userId}")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         User updatedUser = userService.update(userId, user);

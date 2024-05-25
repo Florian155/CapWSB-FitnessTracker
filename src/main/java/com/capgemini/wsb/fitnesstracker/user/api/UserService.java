@@ -1,5 +1,6 @@
 package com.capgemini.wsb.fitnesstracker.user.api;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +19,10 @@ public interface UserService {
     /**
      * Pobiera użytkowników starszych niż określony wiek.
      *
-     * @param age Próg wiekowy
+     * @param date Próg wiekowy
      * @return Lista użytkowników starszych niż określony wiek
      */
-     List<User> getUsersOlderThanAge(int age);
+    public List<User> getUsersOlderThanDate(LocalDate date);
     /**
      * Aktualizuje istniejącego użytkownika.
      *
@@ -46,7 +47,7 @@ public interface UserService {
      *         lub pusty, jeśli użytkownik nie został znaleziony.
      */
     Optional<User> getUserByParam(String param);
+
+
     Optional<User> getUser(Long userId);
-
-
 }

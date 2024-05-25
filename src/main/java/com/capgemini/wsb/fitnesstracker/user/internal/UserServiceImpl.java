@@ -31,14 +31,10 @@ public class UserServiceImpl implements UserService, UserProvider {
         return userRepository.save(user);
     }
 
-    private int calculateAge(LocalDate birthDate) {
-        LocalDate currentDate = LocalDate.now();
-        return Period.between(birthDate, currentDate).getYears();
-    }
-    public List<User> getUsersOlderThanAge(int age) {
+    public List<User> getUsersOlderThanDate(LocalDate date) {
         List<User> allUsers = userRepository.findAll();
         return allUsers.stream()
-                .filter(user -> calculateAge(user.getBirthdate()) > age)
+                .filter(user -> user.getBirthdate().isBefore(date))
                 .collect(Collectors.toList());
     }
     public User update(Long userId, User user) {
@@ -69,11 +65,23 @@ public class UserServiceImpl implements UserService, UserProvider {
 
 
 
-    @Override
-    public Optional<User> getUser(final Long userId) {
-        return userRepository.findById(userId);
-    }
 
+    @Override
+    public Optional<User> getUser(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+
+        Optional<User> optionalUser = userRepository.findById(userId);
+
+        if (optionalUser.isPresent()) {
+            // Zwrócenie znalezionego użytkownika
+            return optionalUser;
+        } else {
+            // Jeśli użytkownik nie został znaleziony, zwracamy pustą wartość Optional
+            return Optional.empty();
+        }
+    }
 
     @Override
     public List<User> findAllUsers() {
@@ -83,6 +91,7 @@ public class UserServiceImpl implements UserService, UserProvider {
 
     @Override
     public void deleteUser(Long userId) throws UserNotFoundException {
+
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             userRepository.deleteById(userId);
@@ -93,12 +102,13 @@ public class UserServiceImpl implements UserService, UserProvider {
 
     }
 
-    List<MailUserDto> findUserByMail(String email) {
+    List<MailUserDto> findUsersByMail(String email) {
         return userRepository.findAll().stream()
                 .filter(user -> user.getEmail().toLowerCase().contains(email.toLowerCase()))
                 .map(UserMapper::toMailUserDto)
-                .collect(Collectors.toList());
+                .toList();
     }
+
 
     public Optional<User> getUserByParam(String param) {
         // Convert param to lower case for case-insensitive comparison

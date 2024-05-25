@@ -12,8 +12,9 @@ import java.util.List;
 public interface TrainingService {
     List<Training> getAllTrainingsForDedicatedUser(Long userId);
     List<Training> getAllTrainingsForDedicatedEndTime(Date endTime);
-    public Training createTraining(Training training, Long userId);
+     Training createTraining(Training training, Long userId);
     Training update(Long trainingId, Training training);
+    List<Training> getAllTrainingsForActivity(ActivityType activityType);
     }
 
 

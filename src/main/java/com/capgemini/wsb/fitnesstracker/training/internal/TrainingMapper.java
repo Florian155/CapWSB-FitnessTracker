@@ -17,6 +17,7 @@ public class TrainingMapper {
         trainingDto.setDistance(training.getDistance());
         trainingDto.setStartTime(training.getStartTime());
         trainingDto.setEndTime(training.getEndTime());
+        trainingDto.setActivityType(training.getActivityType());
         return trainingDto;
     }
     Training toEntity(TrainingDto trainingDto) {
