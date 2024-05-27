@@ -77,6 +77,11 @@ public class UserServiceImpl implements UserService, UserProvider {
             return Optional.empty();
         }
     }
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
 
     @Override
     public List<User> findAllUsers() {
@@ -120,7 +125,8 @@ public class UserServiceImpl implements UserService, UserProvider {
                                 user.getBirthdate().toString().equals(param) // Assuming birthdate is a String
                 )
                 .findFirst();
-}}
+}
+}
 
 
 

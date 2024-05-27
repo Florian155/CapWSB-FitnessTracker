@@ -50,4 +50,5 @@ public interface UserService {
 
 
     Optional<User> getUser(Long userId);
-}
+    public List<User> getAllUsers();
+    }

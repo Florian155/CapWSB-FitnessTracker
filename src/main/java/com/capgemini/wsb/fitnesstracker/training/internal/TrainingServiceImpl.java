@@ -60,6 +60,8 @@ class TrainingServiceImpl implements TrainingProvider, TrainingService {
                 .filter(training -> training.getActivityType() == activityType)
                 .collect(Collectors.toList());
     }
+
+
     @Override
     public Training createTraining(TrainingRequest trainingRequest) {
         if (trainingRequest.getUserId() == null) {
