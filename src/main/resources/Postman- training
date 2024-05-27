@@ -10,7 +10,8 @@
 			"name": "EndTime",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": "http://localhost:8080/v1/trainings/finished/2024-01-18"
 			},
 			"response": []
 		},
@@ -32,7 +33,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/v1/trainings/param?activityType=CYCLING",
+					"raw": "http://localhost:8080/v1/trainings/activityType?activityType=CYCLING",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -41,7 +42,7 @@
 					"path": [
 						"v1",
 						"trainings",
-						"param"
+						"activityType"
 					],
 					"query": [
 						{
@@ -60,32 +61,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{   \"userId\": 1,\r\n    \"startTime\": \"2024-01-19T07:00:00.000+00:00\",\r\n    \"endTime\": \"2024-01-19T08:30:00.000+00:00\",\r\n    \"activityType\": \"RUNNING\",\r\n    \"distance\": 10.5,\r\n    \"averageSpeed\": 8.2\r\n\r\n}",
+					"raw": "{  \r\n    \"id\": 1,\r\n                \"userId\":1,\r\n                \"startTime\": \"2022-04-01T10:00:00\",\r\n                \"endTime\": \"2022-04-01T11:00:00\",\r\n                \"activityType\": \"TENNIS\",\r\n                \"distance\": 0.0,\r\n                \"averageSpeed\": 0.0\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8080/v1/trainings/addTraining?userId=8",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"v1",
-						"trainings",
-						"addTraining"
-					],
-					"query": [
-						{
-							"key": "userId",
-							"value": "8"
-						}
-					]
-				}
+				"url": "http://localhost:8080/v1/trainings"
 			},
 			"response": []
 		},
@@ -96,14 +79,14 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"distance\": 20.5\r\n}",
+					"raw": "{\r\n    \"distance\": 24.5\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "http://localhost:8080/v1/trainings/update/10"
+				"url": "http://localhost:8080/v1/trainings/10"
 			},
 			"response": []
 		},
@@ -111,7 +94,8 @@
 			"name": "AllTrainings",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": "http://localhost:8080/v1/trainings"
 			},
 			"response": []
 		},
@@ -119,7 +103,8 @@
 			"name": "TrainingForUserId",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": "http://localhost:8080/v1/trainings/1"
 			},
 			"response": []
 		}

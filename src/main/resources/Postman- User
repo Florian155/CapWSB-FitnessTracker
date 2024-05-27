@@ -29,7 +29,7 @@
 						}
 					}
 				},
-				"url": "localhost:8080/v1/users/addUser"
+				"url": "localhost:8080/v1/users"
 			},
 			"response": []
 		},
@@ -56,7 +56,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://localhost:8080/v1/users/email/emm"
+				"url": "http://localhost:8080/v1/users/Emma.Johnson@domain.com"
 			},
 			"response": []
 		},
@@ -65,33 +65,25 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/v1/users/details?age=39",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"v1",
-						"users",
-						"details"
-					],
-					"query": [
-						{
-							"key": "age",
-							"value": "39"
-						}
-					]
-				}
+				"url": "http://localhost:8080/v1/users/older/1980-04-11"
 			},
 			"response": []
 		},
 		{
 			"name": "update",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n\r\n  \"lastName\": \"Kamsa\"\r\n \r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/v1/users/4"
 			},
 			"response": []
 		}
