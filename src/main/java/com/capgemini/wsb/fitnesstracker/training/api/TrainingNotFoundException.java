@@ -1,5 +1,4 @@
 package com.capgemini.wsb.fitnesstracker.training.api;
-
 import com.capgemini.wsb.fitnesstracker.exception.api.NotFoundException;
 
 /**

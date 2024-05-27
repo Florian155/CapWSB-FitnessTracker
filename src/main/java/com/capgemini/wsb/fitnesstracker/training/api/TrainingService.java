@@ -1,18 +1,14 @@
 package com.capgemini.wsb.fitnesstracker.training.api;
 
 import com.capgemini.wsb.fitnesstracker.training.internal.ActivityType;
-import com.capgemini.wsb.fitnesstracker.user.api.User;
-import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 public interface TrainingService {
     List<Training> getAllTrainingsForDedicatedUser(Long userId);
     List<Training> getAllTrainingsForDedicatedEndTime(Date endTime);
-     Training createTraining(Training training, Long userId);
+     Training createTraining(TrainingRequest trainingRequest);
     Training update(Long trainingId, Training training);
     List<Training> getAllTrainingsForActivity(ActivityType activityType);
     }

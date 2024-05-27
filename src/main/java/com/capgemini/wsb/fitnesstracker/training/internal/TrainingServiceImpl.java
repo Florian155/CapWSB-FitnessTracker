@@ -1,22 +1,13 @@
 package com.capgemini.wsb.fitnesstracker.training.internal;
 
-import com.capgemini.wsb.fitnesstracker.training.api.Training;
-import com.capgemini.wsb.fitnesstracker.training.api.TrainingProvider;
-import com.capgemini.wsb.fitnesstracker.training.api.TrainingService;
+import com.capgemini.wsb.fitnesstracker.training.api.*;
 import com.capgemini.wsb.fitnesstracker.user.api.User;
-import com.capgemini.wsb.fitnesstracker.training.api.TrainingNotFoundException;
 import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
-import com.capgemini.wsb.fitnesstracker.user.api.UserProvider;
 import com.capgemini.wsb.fitnesstracker.user.api.UserService;
-import com.capgemini.wsb.fitnesstracker.user.internal.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -31,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-    public class TrainingServiceImpl implements TrainingProvider, TrainingService {
+class TrainingServiceImpl implements TrainingProvider, TrainingService {
 
     private final TrainingRepository trainingRepository;
 
@@ -69,36 +60,33 @@ import java.util.stream.Collectors;
                 .filter(training -> training.getActivityType() == activityType)
                 .collect(Collectors.toList());
     }
-
-    public Training createTraining(Training training, Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("User ID cannot be null");
+    @Override
+    public Training createTraining(TrainingRequest trainingRequest) {
+        if (trainingRequest.getUserId() == null) {
+            throw new IllegalArgumentException("Użytkownik nie może być null");
         }
 
-        Optional<User> optionalUser = userService.getUser(userId);
-
-        if (optionalUser.isPresent()) {
-            // Zwrócenie znalezionego użytkownika
-            return optionalUser;
-        } else {
-            // Jeśli użytkownik nie został znaleziony, zwracamy pustą wartość Optional
-            return Optional.empty();
+        Optional<User> optionalUser = userService.getUser(trainingRequest.getUserId());
+        if (optionalUser.isEmpty()) {
+            throw new UserNotFoundException("Nie znaleziono użytkownika o id: " + trainingRequest.getUserId());
         }
-        Optional<User> userOptional = userService.getUser(userId);
-        if (userOptional.isPresent()) {
-            // Set the user to the training if found
-            User user = userOptional.get();
-            training.setUser(user);
+        User user = optionalUser.get();
 
-            // Tworzenie nowego obiektu Training na podstawie przekazanego
-            Training newTraining = new Training();
-            newTraining.setUser(user);
-            return trainingRepository.save(newTraining);
-        } else {
-            // Handle the case when user is not found
-            throw new UserNotFoundException("User not found with ID: " + userId);
-        }
+        Training training = new Training();
+        training.setUser(user);
+        training.setAverageSpeed(trainingRequest.getAverageSpeed());
+        training.setDistance(trainingRequest.getDistance());
+        training.setStartTime(trainingRequest.getStartTime());
+        training.setEndTime(trainingRequest.getEndTime());
+        training.setActivityType(trainingRequest.getActivityType());
+
+        return trainingRepository.save(training);
     }
+
+
+
+
+
 
 
     public Training update(Long trainingId, Training training) {

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
-public class TrainingMapper {
+class TrainingMapper {
     private final UserMapper userMapper;
     TrainingDto toDto(Training training) {
 

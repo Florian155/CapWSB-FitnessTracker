@@ -2,12 +2,16 @@ package com.capgemini.wsb.fitnesstracker.training.internal;
 
 import com.capgemini.wsb.fitnesstracker.user.internal.UserDto;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class TrainingDto{
+class TrainingDto{
 
     private Long id;
 
@@ -25,6 +29,7 @@ public class TrainingDto{
 
 
     private double averageSpeed;
+
 
 
 }
